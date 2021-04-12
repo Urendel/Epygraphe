@@ -3,8 +3,8 @@
 Ce projet a été développé dans le cadre du module Python de l'École nationale des Chartes.
 
 Pendant mes années d'études en Histoire ancienne je participais à un séminaire sur les inscriptions
-épigraphiques Grecques. Par la matière le nombre de participant était de fait très limité 
-et venant d'horizon tout à fait différents - étudiants, chercheurs, archéologue, conservation - ce qui permettait beaucoup d'échanges
+épigraphiques Grecques. Par la matière, le nombre de participant était de fait très limité 
+et venant d'horizon tout à fait différents - étudiants, chercheurs, archéologues, historiens de l'art - ce qui permettait beaucoup d'échanges
 et beaucoup de réflexion sur la restitution, la traduction et la mise en contexte de certains textes, le tout arbitré par
 notre professeur.
 
@@ -46,9 +46,9 @@ pour changer vos informations personnelles.
 
 C'est aussi dans le menu Navigation que vous trouverez la page d'administration du site.
 En tant qu'administrateur c'est à vous d'entrer de nouvelles inscriptions sur le site. Pour ce faire
-veuillez visiter la base de données épigraphiques de l'universit d'[Heidelberg](https://edh-www.adw.uni-heidelberg.de/home/), trouvez une inscription
-qui vous intéresse et que vous aimeriez traiter et entrez les 6 chiffres du no que vous trouverez dans l'url ou la description de l'inscription sous
-le nom de N° Heidelberg.
+veuillez visiter la base de données épigraphiques de l'université d'[Heidelberg](https://edh-www.adw.uni-heidelberg.de/home/), trouvez une inscription
+qui vous intéresse et que vous aimeriez traiter, et entrez les 6 chiffres du numéro que vous trouverez dans l'url ou la description de l'inscription sous
+le nom de N° Heidelberg (Sous le format HD000000).
 
 Dans la page administrateur toujours vous pourrez supprimer des utilisateurs, vous pouvez aussi nommer d'autres administrateurs
 ou des modérateurs, ces derniers serviront à modérer les zone de discussion dans chaque pages d'inscriptions.
