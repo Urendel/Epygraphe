@@ -41,7 +41,7 @@ de résultats d'affichage d'inscriptions par page qui seront visible sur la page
 
 Le site est conçu avec une base de données pré remplie pour que la personne qui installe le site soit
 l'administrateur du dis site. Vous devrez passer par le site lui-même pour vous connecter en tant qu'administrateur
-le login et le mot de passe sont tous les deux ``admin`` ensuite vous devrez passer sur votre page personnelle qui se trouve dans le menu Navigation
+le login est ``admin`` et le mot de passe ``admin00``ensuite vous devrez passer sur votre page personnelle qui se trouve dans le menu Navigation
 pour changer vos informations personnelles.
 
 C'est aussi dans le menu Navigation que vous trouverez la page d'administration du site.
