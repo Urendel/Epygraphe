@@ -1,0 +1,42 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Navigation : Page {{resultats.page}}{%endblock%}
+
+{% block corps %}
+
+<h1>Navigation</h1>
+{% if resultats %}
+<p>Il y a {{resultats.total}} inscriptions dans la base</p>
+<ul>
+    {% for item in resultats.items %}
+    <li>Cette inscription est en {{item.inscription_language}}. Datée {{item.inscription_date}} et à pour référence <a
+            href="{{url_for('item', inscription_id=item.inscription_id)}}">{{item.inscription_no_hd}}</a>. Elle compte
+        {{item.versions|length}} traductions
+    </li>
+    {% endfor %}
+</ul>
+<nav aria-label="research-pagination">
+    <ul class="pagination">
+        {%- for page in resultats.iter_pages() %}
+        {% if page %}
+        {% if page != resultats.page %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for("naviguer", page=page) }}">{{page}}</a>
+        </li>
+        {% else %}
+        <li class="page-item active disabled">
+            <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+        </li>
+        {% endif %}
+
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">...</a>
+        </li>
+        {% endif %}
+
+        {%- endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

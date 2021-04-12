@@ -1,0 +1,87 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Tableau de bord{%endblock%}
+
+{% block corps %}
+
+<h1>Tableau de bord du site</h1>
+<div>
+    <h2>Insertion d'une nouvelle inscription.</h2>
+    <p>Vous pouvez trouver ces inscriptions sur le site de la <a href="https://edh-www.adw.uni-heidelberg.de" target="_blank">base de données épigraphique Heildeberg</a></p>
+    <form class="form" method="POST" action="{{url_for("administrer", page=page)}}">
+    <label for="register-login" class="col-sm-2 col-form-label">Numéro Heildelberg:</label>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">HD</span>
+        </div>
+        <input type="text" class="form-control" placeholder="000000" name="add" aria-label="000000" aria-describedby="basic-addon3">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary" name="action" value="add_inscription">Entrer l'inscription en
+            base
+        </button>
+    </div>
+    </form>
+</div>
+<div>
+    <h2>Gestion des utilisateurs</h2>
+    <p>Il y a {{utilisateurs.total}} utilisateurs dans la base</p>
+    <ul>
+        {% for utilisateur in utilisateurs.items %}
+        <form class="form" method="POST" action="{{url_for("administrer", page=page)}}">
+        <li><p><a href="{{url_for('utilisateur', user_id=utilisateur.user_id)}}" class="profile-link">{{utilisateur.user_prenom}} {{utilisateur.user_nom}}</a>
+            {% if utilisateur.user_last_seen is none %}
+                Dernière connexion : Jamais
+            {% else %}
+                Dernière connexion : {{utilisateur.user_last_seen.strftime("%d/%m/%Y")}}
+            {% endif %}
+
+            {% if utilisateur.user_is_admin %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" name="admin" value="{{utilisateur.user_id}}">Rétrograder l'administrateur</button>
+            {% else %}
+                <button type="submit" class="btn btn-outline-success btn-sm" name="admin" value="{{utilisateur.user_id}}">Promouvoir en administrateur</button>
+                {% if utilisateur.user_is_mod %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm" name="modo" value="{{utilisateur.user_id}}">Rétrograder le modérateur</button>
+                {% else %}
+                    <button type="submit" class="btn btn-outline-success btn-sm" name="modo" value="{{utilisateur.user_id}}">Promouvoir en modérateur</button>
+                {% endif %}
+            {% endif %}
+
+            {% if current_user.user_id != utilisateur.user_id %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" name="delete" value="{{utilisateur.user_id}}">Supprimer</button>
+            {% endif %}
+            </p>
+        </li>
+        </form>
+
+        {% endfor %}
+
+    </ul>
+    <nav aria-label="research-pagination">
+        <ul class="pagination">
+            {%- for page in utilisateurs.iter_pages() %}
+            {% if page %}
+            {% if page != utilisateurs.page %}
+            <li class="page-item">
+                <a class="page-link" href="{{url_for("administrer", page=page)}}">{{page}}</a>
+            </li>
+            {% else %}
+            <li class="page-item active disabled">
+                <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+            </li>
+            {% endif %}
+
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            {% endif %}
+
+            {% endfor %}
+        </ul>
+    </nav>
+</div>
+<div>
+    <p><a href="{{url_for('accueil')}}">Retour à l'accueil</a></p>
+</div>
+{% endblock %}

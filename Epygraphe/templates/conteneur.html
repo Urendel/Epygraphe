@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}} {%block titre %}{%endblock%}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {% include "partials/metadata.html" %}
+    {% include "partials/css.html" %}
+
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark justify-content-between bg">
+        <a class="navbar-brand" href="{{url_for('accueil')}}">{{title}}</a>
+        <ul class="navbar-nav mr-auto">
+            <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Navigation</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{url_for("naviguer")}}">Liste des Inscriptions</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{{url_for('utilisateur', user_id=current_user.user_id)}}">Page Personnelle</a></li>
+                        {% endif %}
+                        {% if current_user.user_is_admin %}
+                            <div class="dropdown-divider"></div>
+                            <li><a class="dropdown-item" href="{{url_for("administrer")}}">Menu Administrateur</a></li>
+                        {% endif %}
+                    </ul>
+            </div>
+            {% if not current_user.is_authenticated %}
+            <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Connexion</a>
+                    <div class="dropdown-menu">
+                        <form class="px-4 py-3" method="POST" action="{{url_for("connexion")}}">
+                            <div class="form-group">
+                                <label for="register-login">Login</label>
+                                <input type="text" class="form-control" id="register-login" name="login" placeholder="Login">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">Password</label>
+                                <input type="password" class="form-control" id="register-password" placeholder="Mot de passe" name="motdepasse">
+                            </div>
+                            <button type="submit" name="connexion" value="{{request.url}}" class="btn btn-primary">Se Connecter</button>
+                        </form>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{url_for("inscription")}}">Vous n'êtes pas inscrit ? S'inscrire</a>
+                    </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for("deconnexion")}}">Déconnexion ({{current_user.user_prenom}})</a>
+            </li>
+            {% endif %}
+        </ul>
+        <form class="form-inline" action="{{url_for("recherche")}}" method="GET">
+        <input class="form-control" name="q" type="search" placeholder="Recherche" aria-label="Recherche">
+        <button class="btn btn-info" type="submit">Rechercher</button>
+        </form>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for category, message in messages %}
+                <div class="alert alert-{{category}}" role="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col">
+                {% block corps %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

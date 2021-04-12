@@ -1,0 +1,42 @@
+{% extends "conteneur.html" %}
+{% block afternav %}
+{%endblock%}
+{% block corps %}
+<h1 class="text-center">Bienvenue sur {{title}}</h1>
+<div class="text-center">
+    <p>L'objectif de ce site est de partager avec tous des inscriptions épigraphiques que vous pourrez traduire ou
+        commenter avec le reste de votre groupe.<br>Les inscriptions proviennent du la base de données <a
+                href="https://edh-www.adw.uni-heidelberg.de" target="_blank">Heildeberg</a> et choisies par
+        l'administrateur du site.</p>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col text-left">
+            {% if inscriptions %}
+            <p>Les {{inscriptions|length}} dernières inscriptions enregistrées par l'administrateur:</p>
+            <ul>
+                {% for inscription in inscriptions %}
+                <li><a href="{{url_for('item', inscription_id=inscription.inscription_id)}}">{{inscription.inscription_no_hd}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>La base de données des Inscriptions est en cours de constitution</p>
+            {% endif %}
+        </div>
+        <div class="col text-right">
+            {% if utilisateurs %}
+            <p>Les {{utilisateurs|length}} dernières personnes inscrites sur le site:</p>
+            <ul>
+                {% for utilisateur in utilisateurs %}
+                <li><a href="{{url_for('utilisateur', user_id=utilisateur.user_id)}}">{{utilisateur.user_prenom}}
+                    {{utilisateur.user_nom}}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>La base de données des Utilisateur est en cours de constitution</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

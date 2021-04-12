@@ -1,0 +1,130 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}
+    {%if item %}|{{item.inscription_no_hd}} {% endif %}
+{% endblock %}
+
+{% block corps %}
+    {% if item %}
+        <h4 class="text-center">{{item.inscription_no_hd}}</h4>
+
+            <h5 class="text-center">Lieu de découverte</h5><p class="text-center">{{item.inscription_lieu}}</p>
+            <h5 class="text-center">Langue d'inscription</h5><p class="text-center">{{item.inscription_language}}</p>
+            <h5 class="text-center">Datation</h5><p class="text-center">{{item.inscription_date}}</p>
+            <h5 class="text-center">Type</h5><p class="text-center">{{item.inscription_type}}</p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col text-left">
+                        <h5>Transcription</h5>
+                        <p>{% for ligne in item.inscription_texte.split("/")%}
+                            {{ligne}}<br>
+                        {% endfor %}</p>
+                    </div>
+                    <div class="col text-right">
+                        <h5>Traduction</h5>
+                        {% if versions %}
+                            <form class="form" method="POST" action="{{url_for('item', inscription_id=item.inscription_id, page=page)}}">
+                                <div class="input-group input-group-sm">
+                                    <select name="choix" class="custom-select" id="inputGroup-sizing-sm">
+                                        {% for version in versions%}
+                                            <option value="{{version.version_id}}">Traduction de {{version.user.user_prenom}} {{version.user.user_nom}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" name="btn_choix" type="submit">Choisir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            {% if texte_envoye %}
+                                <p>{% for ligne in texte_envoye.split("\n") %}
+                                {{ligne}}<br>
+                                {% endfor %}</p>
+                            {% endif %}
+                        {% else %}
+                            <p>Il n'y a pas encore de traduction</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h5 class="text-center">Proposer une traduction</h5>
+                {% if current_user.is_authenticated %}
+                    <form class="form" method="POST" action="{{url_for('item', inscription_id=item.inscription_id, page=page)}}">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Traduction</span>
+                            </div>
+                            <textarea class="form-control" name="trad" aria-label="Traduction"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" name="traduire">Envoyer sa traduction</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <p class="text-center">Connectez vous pour pouvoir proposer une traduction</p>
+                {% endif %}
+            </div>
+            <div class="text-center">
+                <h5 class="text-center">Commentaires</h5>
+                {% if commentaires %}
+                    <ul>
+                        {% for commentaire in commentaires.items %}
+                            <div class="post-comment">
+                                {% if current_user.user_id == commentaire.user.user_id or current_user.user_is_admin or current_user.user_is_mod %}
+                                    <form class="form" method="POST" action="{{url_for('item', inscription_id=item.inscription_id, page=page)}}">
+                                        <button type="submit" class="close" aria-label="Close" name="delete" value="{{commentaire.comment_id}}">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                <p class="text-muted">Le {{commentaire.comment_date.strftime("%d/%m/%Y à %k:%M")}}<br></p>
+                                <p>{% for ligne in commentaire.comment_text.split("\n") %}
+                                {{ligne}}<br>{% endfor %} par <a href="{{url_for('utilisateur', user_id=commentaire.user.user_id)}}" class="profile-link">{{commentaire.user.user_prenom}} {{commentaire.user.user_nom}}</a></p>
+
+                            </div>
+
+                        {% endfor %}
+                    </ul>
+                     <nav aria-label="research-pagination">
+                         <ul class="pagination">
+                             {%- for page in commentaires.iter_pages() %}
+                                {% if page %}
+                                    {% if page != commentaires.page %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{url_for('item', inscription_id=item.inscription_id, page=page)}}">{{page}}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item active disabled">
+                                            <a class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                                        </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link">...</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                         </ul>
+                     </nav>
+                {% else %}
+                            <p>Il n'y a pas encore de commentaires</p>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                    <form class="form" method="POST" action="{{url_for('item', inscription_id=item.inscription_id, page=page)}}">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Commentaire</span>
+                            </div>
+                            <input type="text" class="form-control" name="com" placeholder="Poster un message">
+                        </div>
+                    </form>
+                {% else %}
+                    <p class="text-center">Connectez vous pour pouvoir laisser un commentaire</p>
+                {% endif %}
+            </div>
+    {% else %}
+        <p>La base de données est en cours de constitution</p>
+    {% endif %}
+    <p><a href="{{url_for('accueil')}}">Retour à l'accueil</a></p>
+{% endblock %}
